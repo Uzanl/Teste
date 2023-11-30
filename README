@@ -1,1 +1,37 @@
+# Projeto SPA de Veículos
+
+## Requisitos
+
+- Node.js (versão X.X.X)
+- MySQL (versão 8.0.32)
+- MySQL ODBC 8.0 Unicode Driver
+
+## Configuração do Projeto
+
+1. Clone o repositório.
+2. Execute o comando `npm install` para instalar as dependências do projeto.
+
+## Configuração do Banco de Dados
+
+1. Certifique-se de ter o MySQL instalado (versão 8.0.32).
+2. Crie um banco de dados de acordo com as necessidades do projeto.
+3. Verifique e atualize as configurações de conexão do banco de dados no arquivo `.env`.
+
+## Configuração do ODBC
+
+1. Instale o MySQL ODBC 8.0 Unicode Driver.
+2. Crie uma fonte de dados ODBC 64 bits utilizando o MySQL ODBC 8.0 Unicode Driver.
+3. Configure a fonte de dados para se conectar ao banco de dados MySQL.
+
+## Como Rodar
+
+1. Execute o comando `node ex1` para executar o primeiro exercício.
+2. Execute o comando `node ex2` para executar o segundo exercício.
+3. Execute o comando `node ex3` para executar o terceiro exercício.
+4. Execute o comando `node ex4` para executar o quarto exercício.
+5. Execute o comando `node server.js` para iniciar o servidor e rodar o quinto exercício.
+
+## Observações
+
+Certifique-se de que todas as dependências estão instaladas e as configurações do banco de dados e ODBC estão corretas antes de rodar o projeto.
 
