@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const connection = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'Sony#Xbox*1ç',
+  password: 'Sony#Xbox*1ç', //PASSWORD DO SEU MYSQL
   database: 'carros',
 });
 
@@ -120,7 +120,6 @@ app.post('/search-veiculos-like', (req, res) => {
 
   // Adiciona condição para buscar os registros da última semana se a opção estiver marcada
   if (ultimaSemana) {
-    console.log("chegou aqui")
     sql += ' AND created >= DATE_SUB(NOW(), INTERVAL 1 WEEK)';
   }
 
@@ -302,9 +301,6 @@ app.get('/count-nao-vendidos', (req, res) => {
     res.status(200).json(results[0]); // Os resultados estarão na primeira posição do array
   });
 });
-
-
-
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));

@@ -1,46 +1,50 @@
-.container{
-display: flex;
-flex-direction: column;
-border-radius: 10px;
-padding: 20px;
-background-color: #444;
-box-shadow: 0 5px 10px rgba(0,0,0,0.9);
-text-align: center;
+.container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #444;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.9);
+    text-align: center;
+    min-height: 100vh;
+    width: 70%;
 }
 
-.search-container{
+.search-container {
     display: flex;
-    align-items: center;
+
+    justify-content: center;
     padding: 20px 0;
 }
 
-button, input{
- border-radius: 10px;
+button,
+input {
+    border-radius: 10px;
 }
 
-button{
+button {
     padding: 8px 20px;
     cursor: pointer;
 }
 
-#novoVeiculoForm{
+#novoVeiculoForm {
     display: flex;
     flex-direction: column;
-  text-align: left;
+    text-align: left;
 }
 
-#formNovoVeiculo{
+#formNovoVeiculo {
     text-align: center;
     order: 2;
     padding: 20px;
 }
 
-.erro{
+.erro {
     margin-top: 20px;
     color: red;
 }
 
-body{
+body {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,29 +55,26 @@ body{
     font-family: 'Roboto', sans-serif;
 }
 
-.container-row{
+.container-row {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    min-height: 70vh;
 }
 
-#tableVeiculos{
-    max-height: 200px; /* Altura máxima da tabela */
-    overflow-y: auto; 
-
-}
-  
 table {
     border-collapse: collapse;
     width: 100%;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
 }
 
-.container-tables{
+.container-tables {
     display: flex;
     flex-direction: column;
     order: 1;
@@ -81,8 +82,123 @@ th, td {
     overflow-y: auto;
 }
 
-.sales-info{
+.sales-info {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+button{
+    background-color: #ffffff;
+    color: #000000;
+    transition: transform 0.3s;
+}
+
+button:hover, .search-container input:hover{
+    filter: brightness(0.8);
+}
+
+/* Para telas menores ou iguais a 480px */
+@media screen and (max-width: 480px) {
+
+    h1 {
+        font-size: 16px;
+    }
+
+    .search-container {
+        font-size: 14px;
+        text-align: left;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    #formNovoVeiculo {
+        font-size: 14px;
+    }
+}
+
+/* Para telas maiores que 480px e menores ou iguais a 768px */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+
+    h1 {
+        font-size: 18px;
+    }
+
+    .search-container {
+        font-size: 16px;
+        text-align: left;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    #formNovoVeiculo {
+        font-size: 16px;
+    }
+
+}
+
+@media screen and (max-width: 1199px) {
+    .search-container {
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .container-row {
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .search-container {
+        font-size: 18px;
+        text-align: left;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    #formNovoVeiculo {
+        font-size: 18px;
+    }
+}
+
+/* Estilos para desktops (de 1200 a 1919 pixels) */
+@media screen and (min-width: 1200px) and (max-width: 1919px) {
+
+    .search-container {
+        align-items: center;
+    }
+
+    .search-container input {
+        margin: 0 10px;
+        border: none;
+        transition: background-color 0.3s;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .search-container {
+        align-items: center;
+
+    }
+
+    .search-container input {
+        margin: 0 10px;
+    
+        border: none;
+      
+        transition: background-color 0.3s;
+    }
+
 }

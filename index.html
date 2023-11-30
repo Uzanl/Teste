@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SPA de gerencimanto de veículos">
     <title>SPA de Veículos</title>
+    <link rel="preload" href="/css/index.css" as="style">
     <link rel="stylesheet" href="/css/index.css">
     <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" as="style">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap">
@@ -12,11 +15,11 @@
     <div class="container">
         <h1>Gerenciamento de Veículos</h1>
         <div class="search-container">
-            <label for="searchInput">Veículo:</label>
+            <label for="veiculoInput">Veículo:</label>
             <input type="text" id="veiculoInput" placeholder="Veículo...">
             <br>
         
-            <label for="dataInput">Ano:</label>
+            <label for="anoInput">Ano:</label>
             <input type="number" id="anoInput">
             <br>
         
@@ -37,8 +40,6 @@
             </div>
            
         </div>
-        
-
         <div class="container-row">        
             <div id="formNovoVeiculo" style="display: none;">
                 <h2 class="titulo-form">Novo Veículo</h2>
@@ -51,7 +52,7 @@
                     <input type="number" id="anoformInput" name="ano"><br><br>
                     <label for="descricaoformInput">Descrição:</label><br>
                     <textarea id="descricaoformInput" name="descricao" rows="4" cols="50"></textarea><br><br>
-                    <label for="vendidoInput">Vendido:</label>
+                    <label for="vendidoformInput">Vendido:</label>
                     <input type="checkbox" id="vendidoformInput" name="vendido"><br><br>
                     <button type="submit" id="submitButton">Salvar</button>
                     
