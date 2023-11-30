@@ -121,6 +121,10 @@ function realizarPesquisa() {
          // Botões de ação: Editar e Excluir
     const cellAcoes = newRow.insertCell(-1);
 
+
+// Definindo o atributo data-id com o ID do veículo para essa linha
+   newRow.setAttribute('data-id', veiculo.id_veiculo);
+
     // Botão de edição
     const btnEditar = document.createElement('button');
     btnEditar.textContent = 'Editar';
@@ -177,10 +181,12 @@ function atualizarTabelaVeiculos(veiculos) {
      // Botões de ação: Editar e Excluir
      const cellAcoes = newRow.insertCell(-1);
 
+     newRow.setAttribute('data-id', veiculo.id_veiculo);
+
      // Botão de edição
      const btnEditar = document.createElement('button');
      btnEditar.textContent = 'Editar';
-     btnEditar.addEventListener('click', () => editarVeiculo(veiculo.id_veiculo)); // Chama a função para editar o veículo
+     btnEditar.addEventListener('click', () => preencherCamposParaEdicao(veiculo.id_veiculo)); // Chama a função para editar o veículo
      cellAcoes.appendChild(btnEditar);
  
      // Botão de exclusão (já definido anteriormente)
@@ -216,6 +222,34 @@ async function excluirVeiculo(idVeiculo) {
     console.error('Erro ao excluir veículo:', error);
   }
 }
+
+// Função para preencher os campos do formulário com os dados para edição
+function preencherCamposParaEdicao(idVeiculo) {
+  // Obter a linha associada ao botão clicado
+  console.log(idVeiculo);
+  const linha = document.querySelector(`tr[data-id="${idVeiculo}"]`);
+console.log(linha);
+  // Obter os dados da linha clicada
+  const id = linha.cells[0].textContent;
+  const veiculo = linha.cells[1].textContent;
+  const marca = linha.cells[2].textContent;
+  const ano = linha.cells[3].textContent;
+  const descricao = linha.cells[4].textContent;
+  const vendido = linha.cells[5].textContent;
+
+  // Preencher os campos do formulário com os dados obtidos
+  document.getElementById('veiculoformInput').value = veiculo;
+  document.getElementById('marcaformInput').value = marca;
+  document.getElementById('anoformInput').value = ano;
+  document.getElementById('descricaoformInput').value = descricao;
+
+  // Marcar a checkbox 'Vendido' se o valor for "Sim"
+  document.getElementById('vendidoformInput').checked = (vendido.toLowerCase() === 'sim');
+
+  // Exibir o formulário de edição
+  document.getElementById('formNovoVeiculo').style.display = 'block';
+}
+
 
 
 
