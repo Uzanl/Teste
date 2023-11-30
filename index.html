@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPA de Veículos</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap">
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciamento de Veículos</h1>
+        <div class="search-container">
+            <label for="searchInput">Veículo:</label>
+            <input type="text" id="veiculoInput" placeholder="Veículo...">
+            <br>
+        
+            <label for="dataInput">Ano:</label>
+            <input type="number" id="anoInput">
+            <br>
+        
+            <label for="marcaInput">Marca:</label>
+            <input type="text" id="marcaInput" placeholder="Marca">
+            <br>
+        
+            <button id="btnNovo">Novo</button>
+        </div>
+        
+
+        <div class="container-row">        
+            <div id="formNovoVeiculo" style="display: none;">
+                <h2>Novo Veículo</h2>
+                <form id="novoVeiculoForm">
+                    <label for="veiculoInput">Veículo:</label>
+                    <input type="text" id="veiculoInput" name="veiculo"><br><br>
+                    <label for="marcaInput">Marca:</label>
+                    <input type="text" id="marcaInput" name="marca"><br><br>
+                    <label for="anoInput">Ano:</label>
+                    <input type="number" id="anoInput" name="ano"><br><br>
+                    <label for="descricaoInput">Descrição:</label><br>
+                    <textarea id="descricaoInput" name="descricao" rows="4" cols="50"></textarea><br><br>
+                    <label for="vendidoInput">Vendido:</label>
+                    <input type="checkbox" id="vendidoInput" name="vendido"><br><br>
+                    <button type="submit">Salvar</button>
+                    
+                </form>
+                <div class="erro" style="display: none;"></div>
+            </div>
+            <table id="tableVeiculos">
+                <thead>
+                    <tr>
+                        <th>ID Veículo</th>
+                        <th>Veículo</th>
+                        <th>Marca</th>
+                        <th>Ano</th>
+                        <th>Descrição</th>
+                        <th>Vendido</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Os resultados da pesquisa serão preenchidos dinamicamente aqui -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+   
+    <script src="/script/ex5.js" defer></script>
+</body>
+</html>
+
