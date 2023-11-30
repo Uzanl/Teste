@@ -1,4 +1,5 @@
 const errorDiv = document.querySelector('.erro');
+const submitButton = document.getElementById('submitButton');
 
 // Adicionando o evento de click ao botão "Novo"
 document.getElementById('btnNovo').addEventListener('click', function () {
@@ -8,6 +9,10 @@ document.getElementById('btnNovo').addEventListener('click', function () {
 
 // Adicionando o evento de click ao botão "Novo"
 document.getElementById('btnNovo').addEventListener('click', function () {
+  document.querySelector('.titulo-form').textContent= "Novo veículo";
+  document.getElementById('novoVeiculoForm').reset();
+  submitButton.textContent = 'Salvar'; // Altere o texto do botão
+  submitButton.setAttribute('data-type', 'insert'); 
   alternarFormulario();
 });
 
@@ -18,25 +23,24 @@ let formularioVisivel = false;
 // Função para alternar a exibição do formulário
 function alternarFormulario() {
   const formNovoVeiculo = document.getElementById('formNovoVeiculo');
-  if (formularioVisivel) {
-    formNovoVeiculo.style.display = 'none';
+  if (formularioVisivel && submitButton.textContent=="Atualizar") {
+   
     errorDiv.textContent = "";
-  } else {
+    document.getElementById('novoVeiculoForm').reset(); 
+  } else if(formularioVisivel && submitButton.textContent!="Atualizar"){
+    
+   
+   errorDiv.textContent = "";
+   document.getElementById('novoVeiculoForm').reset(); 
+  }else{
     formNovoVeiculo.style.display = 'block';
-
   }
   // Inverter o estado do formulário
   formularioVisivel = !formularioVisivel;
 }
 
-
-
-document.getElementById('novoVeiculoForm').addEventListener('submit', async function (event) {
-  event.preventDefault(); // Evitar o envio tradicional do formulário
-
-  const formData = new FormData(this);
-  console.log('Dados do formulário:', Object.fromEntries(formData));
-
+// Função para realizar a inserção de um novo veículo
+async function realizarInsercao(formData) {
   try {
     const response = await fetch('/insert-veiculos', {
       method: 'POST',
@@ -56,34 +60,60 @@ document.getElementById('novoVeiculoForm').addEventListener('submit', async func
       errorDiv.style.display = 'block';
       // Trate o erro de acordo com sua lógica
     } else {
-
       console.log('Veículo adicionado com sucesso:', data);
       // Limpar os campos do formulário
-      this.reset(); // Utiliza o método reset() no formulário para limpar os campos
+      document.getElementById('novoVeiculoForm').reset(); // Utiliza o método reset() no formulário para limpar os campos
       buscarTodosVeiculos();
+      preencherTabelaContagemPorAno();
+      buscarContagemVeiculosPorMarca();
+      buscarTotalNaoVendidos();
     }
   } catch (error) {
     console.error('Erro ao enviar dados:', error);
   }
+}
+
+// Adicionando o evento de clique ao botão de submissão
+document.getElementById('submitButton').addEventListener('click', function(event) {
+  event.preventDefault(); // Evitar o envio tradicional do formulário
+  const formData = new FormData(document.getElementById('novoVeiculoForm'));
+
+  const submitButton = document.getElementById('submitButton');
+  const operationType = submitButton.getAttribute('data-type');
+
+  if (operationType === 'update') {
+    const idVeiculo = submitButton.getAttribute('data-id-veiculo');
+    realizarAtualizacao(idVeiculo); // USAR ID AQUIIIII
+  } else {
+    realizarInsercao(formData); // Função para realizar a inserção dos dados
+  }
+
+
+  
 });
 
 const veiculoInput = document.getElementById('veiculoInput');
 const anoInput = document.getElementById('anoInput');
 const marcaInput = document.getElementById('marcaInput');
+const checkboxUltimaSemana = document.getElementById('ultimaSemana');
 
 veiculoInput.addEventListener('input', realizarPesquisa);
 anoInput.addEventListener('input', realizarPesquisa);
 marcaInput.addEventListener('input', realizarPesquisa);
+checkboxUltimaSemana.addEventListener('change', realizarPesquisa);
+
 
 function realizarPesquisa() {
   const veiculo = veiculoInput.value;
   const ano = anoInput.value;
   const marca = marcaInput.value;
+  const ultimaSemana = checkboxUltimaSemana.checked; // Verifica se o checkbox está marcado
 
   const searchData = {
     veiculo,
     ano,
-    marca
+    marca,
+    ultimaSemana // Inclui o estado do checkbox nos dados da pesquisa
   };
 
   fetch('/search-veiculos-like', {
@@ -128,7 +158,7 @@ function realizarPesquisa() {
     // Botão de edição
     const btnEditar = document.createElement('button');
     btnEditar.textContent = 'Editar';
-    btnEditar.addEventListener('click', () => editarVeiculo(veiculo.id_veiculo)); // Chama a função para editar o veículo
+    btnEditar.addEventListener('click', () => preencherCamposParaEdicao(veiculo.id_veiculo)); // Chama a função para editar o veículo
     cellAcoes.appendChild(btnEditar);
 
     // Botão de exclusão (já definido anteriormente)
@@ -214,6 +244,9 @@ async function excluirVeiculo(idVeiculo) {
     // Se a exclusão for bem-sucedida, atualize a tabela de veículos
     if (data.success) {
       buscarTodosVeiculos(); // Recarrega os veículos na tabela após a exclusão
+      preencherTabelaContagemPorAno();
+      buscarContagemVeiculosPorMarca();
+      buscarTotalNaoVendidos();
     } else {
       console.error('Erro ao excluir veículo');
       // Lógica para tratamento de erro, se necessário
@@ -226,9 +259,7 @@ async function excluirVeiculo(idVeiculo) {
 // Função para preencher os campos do formulário com os dados para edição
 function preencherCamposParaEdicao(idVeiculo) {
   // Obter a linha associada ao botão clicado
-  console.log(idVeiculo);
   const linha = document.querySelector(`tr[data-id="${idVeiculo}"]`);
-console.log(linha);
   // Obter os dados da linha clicada
   const id = linha.cells[0].textContent;
   const veiculo = linha.cells[1].textContent;
@@ -236,6 +267,9 @@ console.log(linha);
   const ano = linha.cells[3].textContent;
   const descricao = linha.cells[4].textContent;
   const vendido = linha.cells[5].textContent;
+
+
+
 
   // Preencher os campos do formulário com os dados obtidos
   document.getElementById('veiculoformInput').value = veiculo;
@@ -248,8 +282,199 @@ console.log(linha);
 
   // Exibir o formulário de edição
   document.getElementById('formNovoVeiculo').style.display = 'block';
+
+  document.querySelector('.titulo-form').textContent= "Atualizar";
+
+   // Modifique o comportamento do botão de envio do formulário para indicar uma atualização
+ 
+   submitButton.textContent = 'Atualizar'; // Altere o texto do botão
+   submitButton.setAttribute('data-type', 'update');
+   submitButton.setAttribute('data-id-veiculo', idVeiculo);
 }
 
+async function realizarAtualizacao(idVeiculo) {
+  try {
+    const form = document.getElementById('novoVeiculoForm');
+    const formData = new FormData(form);
+
+    const response = await fetch(`/update-veiculo/${idVeiculo}`, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(Object.fromEntries(formData))
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      console.error(data.error);
+      const errorMessage = data.error;
+      errorDiv.textContent = errorMessage;
+      errorDiv.style.display = 'block';
+    } else {
+      console.log('Veículo atualizado com sucesso:', data);
+      form.reset();
+      buscarTodosVeiculos();
+      preencherTabelaContagemPorAno();
+      buscarContagemVeiculosPorMarca();
+      buscarTotalNaoVendidos();
+    }
+  } catch (error) {
+    console.error('Erro ao enviar dados:', error);
+  }
+}
+
+// Função para buscar e preencher a tabela com a contagem de veículos por ano
+function preencherTabelaContagemPorAno() {
+  fetch('/count-veiculos-por-ano')
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.getElementById('tableBodyCount');
+
+      // Limpar o conteúdo atual da tabela
+      tableBody.innerHTML = '';
+
+      // Preencher a tabela com os resultados da contagem por ano
+      data.forEach(veiculoPorAno => {
+        const newRow = tableBody.insertRow();
+        const cellAno = newRow.insertCell(0);
+        const cellQuantidade = newRow.insertCell(1);
+
+        cellAno.textContent = veiculoPorAno.ano;
+        cellQuantidade.textContent = veiculoPorAno.quantidade;
+      });
+    })
+    .catch(error => console.error('Erro ao buscar contagem de veículos por ano:', error));
+}
+
+// Chamar a função para preencher a tabela quando a página carregar
+document.addEventListener('DOMContentLoaded', preencherTabelaContagemPorAno);
+
+
+// Função assíncrona para buscar e preencher a tabela com a contagem de veículos por ano com filtro LIKE
+async function preencherTabelaContagemPorAnoFiltrado(filtroAno) {
+  try {
+    const response = await fetch(`/count-veiculos-por-ano-like?ano=${filtroAno}`);
+    const data = await response.json();
+    const tableBody = document.getElementById('tableBodyCount');
+
+    // Limpar o conteúdo atual da tabela
+    tableBody.innerHTML = '';
+
+    // Preencher a tabela com os resultados da contagem por ano com filtro LIKE
+    data.forEach(veiculoPorAno => {
+      const newRow = tableBody.insertRow();
+      const cellAno = newRow.insertCell(0);
+      const cellQuantidade = newRow.insertCell(1);
+
+      cellAno.textContent = veiculoPorAno.ano;
+      cellQuantidade.textContent = veiculoPorAno.quantidade;
+    });
+  } catch (error) {
+    console.error('Erro ao buscar contagem de veículos por ano com filtro LIKE:', error);
+  }
+}
+
+// Capturar evento de mudança de texto do input de filtro de ano
+const inputFiltroAno = document.getElementById('anoInput'); // Substitua pelo seu ID de input
+inputFiltroAno.addEventListener('input', async function(event) {
+  const filtroAno = event.target.value; // Obter o valor do input
+
+  // Chamar a função para preencher a tabela com filtro LIKE
+  await preencherTabelaContagemPorAnoFiltrado(filtroAno);
+});
+
+
+// Função para preencher a tabela com a contagem de veículos por marca
+function preencherTabelaContagemPorMarca(data) {
+  const tableBody = document.getElementById('tableBodyCountMarca');
+
+  // Limpa o conteúdo atual da tabela
+  tableBody.innerHTML = '';
+
+  // Itera sobre os dados recebidos e preenche a tabela
+  data.forEach(item => {
+    const newRow = tableBody.insertRow();
+    const cellMarca = newRow.insertCell(0);
+    const cellQuantidade = newRow.insertCell(1);
+
+    cellMarca.textContent = item.marca;
+    cellQuantidade.textContent = item.quantidade;
+  });
+}
+
+// Função para buscar a contagem de veículos por marca usando async/await
+async function buscarContagemVeiculosPorMarca() {
+  try {
+    const response = await fetch('/count-veiculos-por-marca');
+    const data = await response.json();
+    preencherTabelaContagemPorMarca(data);
+  } catch (error) {
+    console.error('Erro ao buscar contagem de veículos por marca:', error);
+  }
+}
+
+// Chamada da função para buscar a contagem de veículos por marca ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+  buscarContagemVeiculosPorMarca();
+});
+
+
+
+// Função assíncrona para buscar e preencher a tabela com a contagem de veículos por ano com filtro LIKE
+async function preencherTabelaContagemPorMarcaFiltrado(filtroMarca) {
+  try {
+    const response = await fetch(`/count-veiculos-por-marca-like?marca=${filtroMarca}`);
+    const data = await response.json();
+    const tableBody = document.getElementById('tableBodyCountMarca');
+
+    // Limpar o conteúdo atual da tabela
+    tableBody.innerHTML = '';
+
+    // Preencher a tabela com os resultados da contagem por ano com filtro LIKE
+    data.forEach(veiculoPorMarca => {
+      const newRow = tableBody.insertRow();
+      const cellMarca = newRow.insertCell(0);
+      const cellQuantidade = newRow.insertCell(1);
+
+      cellMarca.textContent = veiculoPorMarca.marca;
+      cellQuantidade.textContent = veiculoPorMarca.quantidade;
+    });
+  } catch (error) {
+    console.error('Erro ao buscar contagem de veículos por ano com filtro LIKE:', error);
+  }
+}
+
+// Capturar evento de mudança de texto do input de filtro de ano
+const inputFiltroMarca = document.getElementById('marcaInput'); // Substitua pelo seu ID de input
+inputFiltroMarca.addEventListener('input', async function(event) {
+  const filtroMarca = event.target.value; // Obter o valor do input
+
+  // Chamar a função para preencher a tabela com filtro LIKE
+  await preencherTabelaContagemPorMarcaFiltrado(filtroMarca);
+});
+
+
+
+// Função para buscar o total de veículos não vendidos
+async function buscarTotalNaoVendidos() {
+  try {
+    const response = await fetch('/count-nao-vendidos');
+    const data = await response.json();
+
+    // Manipular os dados recebidos e preencher a div
+    const totalNaoVendidosSpan = document.getElementById('totalNaoVendidos');
+    totalNaoVendidosSpan.textContent = `Total de veículos não vendidos: ${data.total}`;
+  } catch (error) {
+    console.error('Erro ao buscar total de veículos não vendidos:', error);
+    // Lógica para tratamento de erros, se necessário
+  }
+}
+
+// Chamar a função para buscar o total de veículos não vendidos quando necessário
+buscarTotalNaoVendidos();
 
 
 

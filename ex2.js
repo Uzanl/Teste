@@ -1,5 +1,5 @@
 //método mais eficiente
-const vetor2 = [5, 3, 2, 4, 7, 1, 0, 6];
+const vetor = [5, 3, 2, 4, 7, 1, 0, 6];
 
 // Ordenação numérica crescente
 vetor.sort((a, b) => a - b);

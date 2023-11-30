@@ -59,7 +59,7 @@ body{
 #tableVeiculos{
     max-height: 200px; /* Altura máxima da tabela */
     overflow-y: auto; 
-    order: 1;
+
 }
   
 table {
@@ -71,4 +71,18 @@ th, td {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
+}
+
+.container-tables{
+    display: flex;
+    flex-direction: column;
+    order: 1;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.sales-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

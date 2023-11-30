@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/css/index.css">
     <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" as="style">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap">
+    <script src="/script/ex5.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -24,12 +25,23 @@
             <br>
         
             <button id="btnNovo">Novo</button>
+            <div class="sales-info">
+              
+                <div class="Count-not-sold">
+                     <p><span id="totalNaoVendidos"></span></p>
+                </div>
+                <label for="ultimaSemana">
+                    registrados na última semana
+                    <input type="checkbox" id="ultimaSemana" name="ultima">
+                  </label>
+            </div>
+           
         </div>
         
 
         <div class="container-row">        
             <div id="formNovoVeiculo" style="display: none;">
-                <h2>Novo Veículo</h2>
+                <h2 class="titulo-form">Novo Veículo</h2>
                 <form id="novoVeiculoForm">
                     <label for="veiculoInput">Veículo:</label>
                     <input type="text" id="veiculoformInput" name="veiculo"><br><br>
@@ -41,33 +53,62 @@
                     <textarea id="descricaoformInput" name="descricao" rows="4" cols="50"></textarea><br><br>
                     <label for="vendidoInput">Vendido:</label>
                     <input type="checkbox" id="vendidoformInput" name="vendido"><br><br>
-                    <button type="submit">Salvar</button>
+                    <button type="submit" id="submitButton">Salvar</button>
                     
                 </form>
                 <div class="erro" style="display: none;"></div>
             </div>
-            <table id="tableVeiculos">
-                <thead>
-                    <tr>
-                        <th>ID Veículo</th>
-                        <th>Veículo</th>
-                        <th>Marca</th>
-                        <th>Ano</th>
-                        <th>Descrição</th>
-                        <th>Vendido</th>
-                        <th>Criado</th>
-                        <th>Atualizado</th>
-                        <th>Ações</th> <!-- Coluna para os botões de exclusão -->
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Os resultados da pesquisa serão preenchidos dinamicamente aqui -->
-                </tbody>
-            </table>
+            <div class="container-tables">
+                <table id="tableVeiculos">
+                    <thead>
+                        <tr>
+                            <th>ID Veículo</th>
+                            <th>Veículo</th>
+                            <th>Marca</th>
+                            <th>Ano</th>
+                            <th>Descrição</th>
+                            <th>Vendido</th>
+                            <th>Criado</th>
+                            <th>Atualizado</th>
+                            <th>Ações</th> <!-- Coluna para os botões de exclusão -->
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Os resultados da pesquisa serão preenchidos dinamicamente aqui -->
+                    </tbody>
+                </table>
+
+                <table id="tableAno">
+                    <thead>
+                        <tr>
+                            <th>Ano</th>
+                            <th>Quantidade</th>                       
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyCount">
+                        <!-- Os resultados da pesquisa serão preenchidos dinamicamente aqui -->
+                    </tbody>
+                </table>
+
+                <table id="tableQtdMarca">
+                    <thead>
+                        <tr>
+                            <th>Marca</th>
+                            <th>Quantidade</th>                       
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyCountMarca">
+                        <!-- Os resultados da pesquisa serão preenchidos dinamicamente aqui -->
+                    </tbody>
+                </table>
+
+
+            </div>
+            
         </div>
     </div>
    
-    <script src="/script/ex5.js" defer></script>
+
 </body>
 </html>
 
