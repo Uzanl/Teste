@@ -1,0 +1,17 @@
+DROP DATABASE IF EXISTS carros;
+
+CREATE DATABASE carros;
+
+USE carros;
+
+CREATE TABLE Veiculos (
+    id_veiculo INT PRIMARY KEY AUTO_INCREMENT,
+    veiculo VARCHAR(100),
+    marca VARCHAR(100),
+    ano INT,
+    descricao TEXT,
+    vendido BOOLEAN,
+    created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
