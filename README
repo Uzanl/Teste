@@ -12,7 +12,7 @@
 2. Execute o comando `npm install` para instalar as dependências do projeto.
 
 ## Configuração do Banco de Dados
-
+1. Banco de dados se encontra no arquivo "carros.txt".
 1. Certifique-se de ter o MySQL instalado (versão 8.0.32).
 2. Crie um banco de dados de acordo com as necessidades do projeto.
 3. Verifique e atualize as configurações de conexão do banco de dados no arquivo `.env`.
