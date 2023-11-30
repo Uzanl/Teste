@@ -29,7 +29,7 @@ app.use('/script', express.static(path.join(__dirname, 'script')));
 app.use(bodyParser.json());
 
 
-app.post('/veiculos', (req, res) => {
+app.post('/insert-veiculos', (req, res) => {
   const { veiculo, marca, ano, descricao, vendido } = req.body;
   const vendidoBooleano = (vendido === 'on');
 
@@ -79,12 +79,41 @@ app.post('/veiculos', (req, res) => {
   });
 });
 
+// Rota para obter todos os veículos
+app.get('/search-veiculos', (req, res) => {
+  // Consulta SQL para selecionar todos os veículos e formatar as datas
+  const sql = `
+    SELECT *,
+    DATE_FORMAT(created, '%d/%m/%Y %H:%i') as created,
+    DATE_FORMAT(updated, '%d/%m/%Y %H:%i') as updated
+    FROM veiculos
+  `;
+
+  // Executar a consulta no banco de dados MySQL
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar veículos:', err);
+      return res.status(500).json({ error: 'Erro ao buscar veículos' });
+    }
+
+    // Retornar os resultados da consulta com as datas formatadas
+    res.status(200).json(results);
+  });
+});
+
+
 // Rota para pesquisa com filtros
-app.post('/search-veiculos', (req, res) => {
+app.post('/search-veiculos-like', (req, res) => {
   const { veiculo, ano, marca } = req.body;
 
   // Consulta no banco de dados utilizando LIKE nos campos desejados
-  const sql = `SELECT * FROM veiculos WHERE veiculo LIKE ? AND ano LIKE ? AND marca LIKE ?`;
+  const sql = `
+    SELECT *,
+    DATE_FORMAT(created, '%d/%m/%Y %H:%i') as created,
+    DATE_FORMAT(updated, '%d/%m/%Y %H:%i') as updated
+    FROM veiculos
+    WHERE veiculo LIKE ? AND ano LIKE ? AND marca LIKE ?
+  `;
   const query = '%' + veiculo + '%';
   const queryAno = '%' + ano + '%';
   const queryMarca = '%' + marca + '%';
@@ -96,6 +125,30 @@ app.post('/search-veiculos', (req, res) => {
       }
 
       res.status(200).json(results);
+  });
+});
+
+// Rota para excluir um veículo pelo ID
+app.delete('/delete-veiculo/:id', (req, res) => {
+  const idVeiculo = req.params.id;
+
+  // Consulta SQL para excluir o veículo com o ID correspondente
+  const sql = 'DELETE FROM veiculos WHERE id_veiculo = ?';
+
+  // Executar a consulta no banco de dados MySQL
+  connection.query(sql, [idVeiculo], (err, result) => {
+    if (err) {
+      console.error('Erro ao excluir veículo:', err);
+      return res.status(500).json({ error: 'Erro ao excluir veículo' });
+    }
+
+    if (result.affectedRows > 0) {
+      // Se ao menos uma linha for afetada, significa que a exclusão foi bem-sucedida
+      res.status(200).json({ success: true });
+    } else {
+      // Caso contrário, o veículo com o ID especificado não foi encontrado para exclusão
+      res.status(404).json({ success: false, error: 'Veículo não encontrado para exclusão' });
+    }
   });
 });
 

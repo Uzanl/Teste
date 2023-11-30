@@ -11,6 +11,7 @@ text-align: center;
 .search-container{
     display: flex;
     align-items: center;
+    padding: 20px 0;
 }
 
 button, input{
@@ -31,6 +32,7 @@ button{
 #formNovoVeiculo{
     text-align: center;
     order: 2;
+    padding: 20px;
 }
 
 .erro{
